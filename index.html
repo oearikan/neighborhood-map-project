@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Football themed neighborhood map</title>
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="container">
+      <nav class="options-box">
+          <h3>Country filter</h3>
+          <select id="country-filter" data-bind="options: countrySelect, value: selectedCountryValue"></select>
+          <h3>List view</h3>
+          <ul data-bind="foreach: teamList">
+            <li data-bind="text: $data"></li>
+          </ul>
+      </nav>
+      <div id="map"></div>
+    </div>
+
+    <script src = "js/libs/jquery.min.js"></script>
+    <script src = "js/libs/knockout-3.4.2.js"></script>
+    <script src = "js/mapstyle.js"></script>
+    <!-- <script src = "js/model.js"></script>
+    <script src = "js/app.js"></script> -->
+    <script src = "js/cached_data.js"></script>
+    <script src = "js/cached_app.js"></script>
+
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDlwjpuXkYPyLd6xiHyuwASmB3Ds01P9wc&v=3&callback=initMap">
+    </script>
+  </body>
+</html>
+
+ <!-- onerror="errorHandlers.errGoogleMaps()" -->
