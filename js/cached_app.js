@@ -9,14 +9,14 @@ function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 56.46249, lng: 3.427734},
     zoom: 6,
-    styles: styles,
+    // styles: styles,
     disableDefaultUI: true
   });
   largeInfowindow = new google.maps.InfoWindow();
   centerAll = new google.maps.LatLng({lat: 56.46249, lng: 3.427734});
   centerSct = new google.maps.LatLng({lat:56.686408, lng: -4.01001});
   centerDnk = new google.maps.LatLng({lat:55.986092, lng: 9.481201});
-  // createMarkers();
+
 
   function aVM() {
     var self = this;
@@ -38,6 +38,13 @@ function initMap() {
       setFilterView(self.selectedCountryValue());
       updateList(id);
     });
+
+    self.setClick = function(value){
+      populateInfoWindow(value.marker, largeInfowindow);
+      value.marker.setAnimation(google.maps.Animation.BOUNCE);
+      stopBounce(value.marker);
+      bringToCenter(value.marker);
+    }
 
     function setFilterView(x) {
       resetMarkers(self.teamList());
@@ -91,7 +98,7 @@ function createMarkers(array) {
         populateInfoWindow(this, largeInfowindow);
         this.setAnimation(google.maps.Animation.BOUNCE);
         stopBounce(this);
-        console.log(this);
+        bringToCenter(this);
       });
   }
 }
@@ -108,6 +115,11 @@ function populateInfoWindow(marker, infowindow) {
       infowindow.setMarker = null;
     });
   }
+}
+
+function bringToCenter (marker){
+  map.setCenter(marker.position)
+  map.setZoom(15)
 }
 
 function stopBounce(marker) {

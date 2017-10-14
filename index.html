@@ -14,7 +14,7 @@
           <select id="country-filter" data-bind="options: countrySelect, value: selectedCountryValue"></select>
           <h3>List view</h3>
           <ul data-bind="foreach: teamList">
-            <li data-bind="click: $data.name">
+            <li data-bind="click: $root.setClick">
               <p>
                 <span data-bind="text: $data.name"></span>
               </p>
