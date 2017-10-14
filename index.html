@@ -14,7 +14,11 @@
           <select id="country-filter" data-bind="options: countrySelect, value: selectedCountryValue"></select>
           <h3>List view</h3>
           <ul data-bind="foreach: teamList">
-            <li data-bind="text: $data"></li>
+            <li data-bind="click: $data.name">
+              <p>
+                <span data-bind="text: $data.name"></span>
+              </p>
+            </li>
           </ul>
       </nav>
       <div id="map"></div>

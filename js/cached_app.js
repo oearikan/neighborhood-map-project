@@ -1,5 +1,8 @@
 var map;
 var largeInfowindow;
+var centerAll,
+    centerSct,
+    centerDnk;
 
 //I use this initial map just to avoid blank screen if the data loading process takes a while. Once it's done I call my mapActions.startMap method to overtake.
 function initMap() {
@@ -10,16 +13,68 @@ function initMap() {
     disableDefaultUI: true
   });
   largeInfowindow = new google.maps.InfoWindow();
-  createMarkers();
+  centerAll = new google.maps.LatLng({lat: 56.46249, lng: 3.427734});
+  centerSct = new google.maps.LatLng({lat:56.686408, lng: -4.01001});
+  centerDnk = new google.maps.LatLng({lat:55.986092, lng: 9.481201});
+  // createMarkers();
+
+  function aVM() {
+    var self = this;
+
+    self.countrySelect = ['Scotland','Denmark', 'All'];
+    self.selectedCountryValue = ko.observable('All');
+    self.teamList = ko.observableArray([]);
+
+    self.selectedCountryId = ko.computed(function(){
+      var id;
+      var x = self.selectedCountryValue();
+      if(x === 'Scotland'){
+        id = 1161;
+      } else if (x ==='Denmark') {
+        id = 320;
+      } else {
+        id = 0;
+      }
+      setFilterView(self.selectedCountryValue());
+      updateList(id);
+    });
+
+    function setFilterView(x) {
+      resetMarkers(self.teamList());
+        if(x==='All'){
+          map.setCenter(centerAll)
+          map.setZoom(6)
+        } else if (x==='Scotland') {
+          map.setCenter(centerSct)
+          map.setZoom(7)
+        } else {
+          map.setCenter(centerDnk)
+          map.setZoom(8)
+        }
+      }
+
+    function updateList(x) {
+      if(!(x===0)){var a = teams.filter(function(item){
+        return item.country_id === x;
+      });
+      self.teamList(a);
+      } else {
+        self.teamList(teams);
+      }
+      createMarkers(self.teamList());
+    }
 }
 
-function createMarkers() {
+  ko.applyBindings(new aVM());
+}
+
+function createMarkers(array) {
     var markerPosition,
         markerTitle,
         theMarker;
-    for(var i = 0; i < teams.length; i++){
-      markerPosition = teams[i].venue.locations.geometry.location;
-      markerTitle = teams[i].name;
+    for(var i = 0; i < array.length; i++){
+      markerPosition = array[i].venue.locations.geometry.location;
+      markerTitle = array[i].name;
       theMarker = new google.maps.Marker({
         position: markerPosition,
         title: markerTitle,
@@ -27,22 +82,22 @@ function createMarkers() {
         id: i,
         icon: markerIcon,
       });
-      teams[i].marker = theMarker;
-      teams[i].marker.logo = teams[i].logo_path;
-      teams[i].marker.image = teams[i].venue.data.image_path;
-      teams[i].marker.teamID = teams[i].id;
-      teams[i].marker.setMap(map);
-      teams[i].marker.addListener('click', function(){
+      array[i].marker = theMarker;
+      array[i].marker.logo = array[i].logo_path;
+      array[i].marker.image = array[i].venue.data.image_path;
+      array[i].marker.teamID = array[i].id;
+      array[i].marker.setMap(map)
+      array[i].marker.addListener('click', function(){
         populateInfoWindow(this, largeInfowindow);
         this.setAnimation(google.maps.Animation.BOUNCE);
         stopBounce(this);
-        // fetchScores(this);
+        console.log(this);
       });
   }
 }
 
 function populateInfoWindow(marker, infowindow) {
-  var contentString = '<div><h1 align="center">' + marker.title + '</h1></div>' + '<img src="' + marker.logo + '" alt="team_logo">';
+  var contentString = '<div><h1 align="center">' + marker.title + '</h1></div>' + '<img src="' + marker.logo + '" alt="team_logo" align="middle">';
   // Check to make sure the infowindow is not already opened on this marker.
   if (infowindow.marker != marker) {
     infowindow.marker = marker;
@@ -61,49 +116,8 @@ function stopBounce(marker) {
   }, 1500);
 }
 
-// function fetchScores (marker) {
-//   $.ajax({
-//     url: "https://soccer.sportmonks.com/api/v2.0/teams/" + marker.teamID +  "?api_token=NaFzexS4PTnt7nRIK8QErXP7XRjz0y1yUjqWNIBUy2Qm5mvwaHRy1YRNw2hR&include=localResults",
-//     success: [function(resp){
-//       console.log(marker.teamID);
-//       console.log(resp.data);
-//     }],
-//     error: function(err){
-//       console.log(err);
-//     }
-//   });
-// }
-
-function aVM() {
-  var self = this;
-
-  self.countrySelect = ['Scotland','Denmark', 'All'];
-  self.selectedCountryValue = ko.observable('All')
-  self.selectedCountryId = ko.computed(function(){
-    var id;
-    if(self.selectedCountryValue() === 'Scotland'){
-      id = 1161;
-      // self.map.panTo({lat:56.686408, lng: -4.01001})
-    } else if (self.selectedCountryValue() ==='Denmark') {
-      id = 320;
-      // self.map.panTo({lat:55.986092, lng: 9.481201})
-    } else {
-      id = 0;
-      // self.map.panTo({lat: 56.46249, lng: 3.427734})
-    }
-    return id;
-  });
-  self.teamList = ko.computed(function(){
-    var list = [];
-    for(var i = 0; i < teams.length; i++){
-      if(self.selectedCountryId() === teams[i].country_id){
-        list.push(teams[i].name);
-      } else if (self.selectedCountryId() === 0) {
-        list.push(teams[i].name);
-      }
-    }
-    return list;
+function resetMarkers (array) {
+  array.forEach(function(item){
+    if(item.marker) {item.marker.setMap(null)}
   });
 }
-
-ko.applyBindings(new aVM());
