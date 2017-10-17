@@ -77,7 +77,8 @@ function initMap () {
 
 //EA: Country id's are used to update the team list array, which is an observable.
     function updateList(id) {
-      if(!(id===0)){var a = teams.filter(function(item){
+      if(id !== 0){
+        var a = teams.filter(function(item){
         return item.country_id === id;
       });
       self.teamList(a);
@@ -126,13 +127,15 @@ function createMarkers(array) {
       array[i].marker.teamID = array[i].id;
       array[i].marker.setMap(map);
       bounds.extend(theMarker.position);
-      array[i].marker.addListener('click', function(){
-        populateInfoWindow(this, largeInfowindow);
-        this.setAnimation(google.maps.Animation.BOUNCE);
-        stopBounce(this);
-        // bringToCenter(this);
-      });
+      array[i].marker.addListener('click', avoidJSHint(this));
   }
+}
+
+function avoidJSHint(marker){
+  populateInfoWindow(marker, largeInfowindow);
+  marker.setAnimation(google.maps.Animation.BOUNCE);
+  stopBounce(marker);
+  // bringToCenter(marker);
 }
 
 function populateInfoWindow(marker, infowindow) {
