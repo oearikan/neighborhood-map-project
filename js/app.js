@@ -127,16 +127,16 @@ function createMarkers(array) {
       array[i].marker.teamID = array[i].id;
       array[i].marker.setMap(map);
       bounds.extend(theMarker.position);
-      array[i].marker.addListener('click', avoidJSHint(this));
+      array[i].marker.addListener('click', avoidJSHint);
   }
 }
 
-function avoidJSHint(marker){
-  populateInfoWindow(marker, largeInfowindow);
-  marker.setAnimation(google.maps.Animation.BOUNCE);
-  stopBounce(marker);
+var avoidJSHint = function(){
+  populateInfoWindow(this, largeInfowindow);
+  this.setAnimation(google.maps.Animation.BOUNCE);
+  stopBounce(this);
   // bringToCenter(marker);
-}
+};
 
 function populateInfoWindow(marker, infowindow) {
   var contentString = '<div><h1 align="center">' + marker.title + '</h1></div>' + '<img src="' + marker.logo + '" alt="team_logo" align="middle">';
