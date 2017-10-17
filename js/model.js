@@ -15,6 +15,22 @@ var model = {
 		}
 	},
 
+//EA: Return of the fetchScotland and fetchDenmark requests contain a venue property which holds the address for the team's stadium. I use this address bits as an input to Google Geocoder API to retrieve marker locaitons (latlngs). However, I need an intermediary function to match the response from the geocoder API to the teams in my fetched list. Since the request is asyncronous, when I simply push the response from the geocoder, the locations end up attaching to wrong teams. I first tried async:false call, which solved the mismatch issue but this turned out to be horrible as I got 15-20 second wait times. Finally I ended using this intermediary fuction. I provide the name of the team as an input to the function which request the marker locations, then use this input as a comparing item to ensure the returned marker in fact belongs the team with the provided name. (You'll probably laugh but I felt so proud of myself after coming up with this solution!! =)
+//Still open for sugestions if there is a more elegant way to handle this!
+	matchNamesWithLocations: function() {
+		var teamName,
+				name,
+				address,
+				city;
+		for(var i = 0; i < model.teams.length; i++){
+			teamName = model.teams[i].name;
+			name = model.teams[i].venue.data.name;
+			address = model.teams[i].venue.data.address;
+			city = model.teams[i].venue.data.city;
+		model.getMarkerLocations(teamName, name, address, city);
+		}
+	},
+
 //EA:  jQuery's .ajax method permits to bind multiple functions in an array to the successful return of the request. This allows me to populate my teams array, which is basically my model(data) in succesion. See how fetchDenmark method is following the callback call.
 	fetchScotland: function() {
 		$.ajax({
@@ -22,7 +38,7 @@ var model = {
 			success: [function(resp){
 				model.callback(resp);
 			}, function(){
-				return model.fetchDenmark();
+				model.fetchDenmark();
 			}],
 			error: function(){
 				errorHandlers.errScotland();
@@ -37,7 +53,7 @@ var model = {
 			success: [function(resp){
 				model.callback(resp);
 			}, function(){
-				return model.getMarkerLocations();
+				model.matchNamesWithLocations();
 			}],
 			error: function(){
 				errorHandlers.errDenmark();
@@ -45,49 +61,23 @@ var model = {
 		});
 	},
 
-//EA: I use this function to get the lat-lng info for the home venues of the teams that's been fetched before. I want to add locations as a property (key) to my array of team objects and I want the correct lat long be appended to each team. Therefore I set the 'async' property of the request to false, which is not quite optimal. I'd appreciate if you could suggest an alternative.(When I do the request async, I cannot assure matching locations for the teams)
-	getMarkerLocations: function() {
+//EA: I use this function to get the lat-lng info for the home venues of the teams that's been fetched before. I want to add locations as a property (key) to my array of team objects and I want the correct lat long be appended to each team. See commentary in model.matchNamesWithLocations(). When the repsonse from geocder api comes, the response is attached to my model only if the team name matches. This way I ensure I don't end up with teams having random marker locations.
+	getMarkerLocations: function(a,b,c,d) {
 		var geocoderUrl = "https://maps.googleapis.com/maps/api/geocode/json?&address=";
 		var googleApiKey = "&key=AIzaSyDlwjpuXkYPyLd6xiHyuwASmB3Ds01P9wc";
-		console.log(Date.now());
-		for(var i = 0; i < model.teams.length; i++){
-			$.ajax({
-				url: geocoderUrl + model.teams[i].venue.data.name + ", " + model.teams[i].venue.data.address + ", " + model.teams[i].venue.data.city + googleApiKey,
-				async: false,
-				success: [function(resp){
-					model.teams[i].venue.locations = resp.results[0];
-				}],
-				error: function() {
-					errorHandlers.errGeocoder();
-				}
-			});
-		}
-		model.createMarkers();
-		console.log(Date.now());
-//EA: I log times before and after the looped ajax request to calculate the cost of the 'async: false' and it turns out to be between 3 secs to 15 secs depending on what have you.
-	},
-
-//EA: This method appends to my data array (i.e. model.teams) the marker objects.
-	createMarkers: function(){
-		var markerPosition,
-				markerTitle,
-				theMarker;
-		for(var i = 0; i < model.teams.length; i++){
-			markerPosition = model.teams[i].venue.locations.geometry.location;
-			markerTitle = model.teams[i].name;
-			theMarker = new google.maps.Marker({
-	      position: markerPosition,
-	      title: markerTitle,
-	      animation: google.maps.Animation.DROP,
-	      id: i,
-	      icon: markerIcon
-	    });
-			model.teams[i].marker = theMarker;
-			model.teams[i].marker.addListener('click', function(){
-				mapActions.populateInfoWindow(this, largeInfowindow);
-			})
-		}
-		mapActions.clearMap();
+		$.ajax({
+			url: geocoderUrl + b + ", " + c + ", " + d + googleApiKey,
+			success: [function(resp){
+				model.teams.forEach(function(team){
+					if(team.name === a){
+						team.venue.locations = resp.results[0];
+					}
+				})
+			}],
+			error: function() {
+				errorHandlers.errGeocoder();
+			}
+		});
 	}
 };
 

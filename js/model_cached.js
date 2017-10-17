@@ -2323,8 +2323,8 @@ var teams = [
 						]
 					},
 					{
-						"long_name": "Stadion Alle",
-						"short_name": "Stadion Alle",
+						"long_name": "Stadion Allé",
+						"short_name": "Stadion Allé",
 						"types": [
 							"route"
 						]
@@ -2339,8 +2339,8 @@ var teams = [
 						]
 					},
 					{
-						"long_name": "Aarhus C",
-						"short_name": "Aarhus C",
+						"long_name": "Aarhus",
+						"short_name": "Aarhus",
 						"types": [
 							"locality",
 							"political"
@@ -2362,29 +2362,28 @@ var teams = [
 						]
 					}
 				],
-				"formatted_address": "Stadion Alle 70, 8000 Aarhus C, Denmark",
+				"formatted_address": "Stadion Allé 70, 8000 Aarhus C, Denmark",
 				"geometry": {
 					"location": {
-						"lat": 56.1320633,
-						"lng": 10.196493
+						"lat": 56.1319716,
+						"lng": 10.1936689
 					},
 					"location_type": "ROOFTOP",
 					"viewport": {
 						"northeast": {
-							"lat": 56.13341228029149,
-							"lng": 10.1978419802915
+							"lat": 56.1333205802915,
+							"lng": 10.1950178802915
 						},
 						"southwest": {
-							"lat": 56.1307143197085,
-							"lng": 10.1951440197085
+							"lat": 56.1306226197085,
+							"lng": 10.1923199197085
 						}
 					}
 				},
 				"place_id": "ChIJX7oIz3NATEYR_rFOfRQFLIU",
 				"types": [
 					"establishment",
-					"point_of_interest",
-					"stadium"
+					"point_of_interest"
 				]
 			}
 		}
@@ -2412,15 +2411,15 @@ var teams = [
 			"locations": {
 				"address_components": [
 					{
-						"long_name": "63-65",
-						"short_name": "63-65",
+						"long_name": "11",
+						"short_name": "11",
 						"types": [
 							"street_number"
 						]
 					},
 					{
-						"long_name": "Gl Hellebækvej",
-						"short_name": "Gl Hellebækvej",
+						"long_name": "Nordre Strandvej",
+						"short_name": "Nordre Strandvej",
 						"types": [
 							"route"
 						]
@@ -2449,30 +2448,31 @@ var teams = [
 						]
 					}
 				],
-				"formatted_address": "Gl Hellebækvej 63-65, 3000 Helsingør, Denmark",
+				"formatted_address": "Nordre Strandvej 11, 3000 Helsingør, Denmark",
 				"geometry": {
 					"location": {
-						"lat": 56.0464918,
-						"lng": 12.5867225
+						"lat": 56.0465649,
+						"lng": 12.5958988
 					},
 					"location_type": "ROOFTOP",
 					"viewport": {
 						"northeast": {
-							"lat": 56.0478407802915,
-							"lng": 12.5880714802915
+							"lat": 56.0479138802915,
+							"lng": 12.5972477802915
 						},
 						"southwest": {
-							"lat": 56.0451428197085,
-							"lng": 12.5853735197085
+							"lat": 56.0452159197085,
+							"lng": 12.5945498197085
 						}
 					}
 				},
-				"place_id": "ChIJfd2cwPswUkYRfTWYSmbgLlA",
+				"place_id": "ChIJ9Y5EJgIxUkYRUGUcGzSOLSM",
 				"types": [
 					"establishment",
-					"point_of_interest"
+					"point_of_interest",
+					"stadium"
 				]
 			}
 		}
 	}
-];
+]
