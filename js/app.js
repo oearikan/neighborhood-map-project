@@ -1,5 +1,5 @@
 var map,
-    myInfoWindow,
+    largeInfowindow,
     bounds;
 //EA: I comment in or out depending on whether I'm using the cached version of the model. Geocoder api has 2500 req/day.
 var teams = model.teams;
@@ -29,11 +29,11 @@ function initMap () {
     // styles: styles,
     disableDefaultUI: true
   });
-  bounds =new google.maps.LatLngBounds();
+  bounds = new google.maps.LatLngBounds();
   largeInfowindow = new google.maps.InfoWindow();
-  centerAll = new google.maps.LatLng({lat: 56.46249, lng: 3.427734});
-  centerSct = new google.maps.LatLng({lat:56.686408, lng: -4.01001});
-  centerDnk = new google.maps.LatLng({lat:55.986092, lng: 9.481201});
+  var centerAll = new google.maps.LatLng({lat: 56.46249, lng: 3.427734});
+  var centerSct = new google.maps.LatLng({lat:56.686408, lng: -4.01001});
+  var centerDnk = new google.maps.LatLng({lat:55.986092, lng: 9.481201});
 
 //EA: This is to keep my center 'centered' when the window resizes.see (https://stackoverflow.com/questions/18444161/google-maps-responsive-resize)
   google.maps.event.addDomListener(window, "resize", function(){
