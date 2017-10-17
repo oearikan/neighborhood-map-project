@@ -73,7 +73,7 @@ function initMap () {
       value.marker.setAnimation(google.maps.Animation.BOUNCE);
       stopBounce(value.marker);
       bringToCenter(value.marker);
-    }
+    };
 
 //EA: Country id's are used to update the team list array, which is an observable.
     function updateList(id) {
@@ -91,14 +91,14 @@ function initMap () {
     function setFilterView(selection){
       resetMarkers(self.teamList());
       if(selection === 'All'){
-        map.setZoom(4)
-        map.setCenter(centerAll)
+        map.setZoom(4);
+        map.setCenter(centerAll);
       } else if (selection === 'Scotland') {
-        map.setZoom(6)
-        map.setCenter(centerSct)
+        map.setZoom(6);
+        map.setCenter(centerSct);
       } else {
-        map.setZoom(6)
-        map.setCenter(centerDnk)
+        map.setZoom(6);
+        map.setCenter(centerDnk);
       }
     }
   }
@@ -124,7 +124,7 @@ function createMarkers(array) {
       array[i].marker.logo = array[i].logo_path;
       array[i].marker.image = array[i].venue.data.image_path;
       array[i].marker.teamID = array[i].id;
-      array[i].marker.setMap(map)
+      array[i].marker.setMap(map);
       bounds.extend(theMarker.position);
       array[i].marker.addListener('click', function(){
         populateInfoWindow(this, largeInfowindow);
@@ -157,11 +157,13 @@ function stopBounce(marker) {
 
 function resetMarkers (array) {
   array.forEach(function(item){
-    if(item.marker) {item.marker.setMap(null)}
+    if(item.marker) {
+      item.marker.setMap(null);
+    }
   });
 }
 
 function bringToCenter (marker){
-  map.setCenter(marker.position)
-  map.setZoom(15)
+  map.setCenter(marker.position);
+  map.setZoom(15);
 }
